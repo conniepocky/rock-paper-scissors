@@ -1,32 +1,39 @@
+(def options 
+  {:rock {:name "rock" :beats :scissors}
+    :paper {:name "paper" :beats :rock}
+    :scissors {:name "scissors" :beats :paper}})
+
+
+(prn (keys options))
+
+(defn rps-result [p1 p2]
+  (cond 
+    (= p1 p2)
+    :draw
+
+    (=(get-in options [p1 :beats]) p2)
+    :win
+
+    :else
+    :lose))
+
+
 ;;Rock Paper Scissors
+(defn rock-paper-scissors []
 
-(prn "Welcome to Rock Paper Scissors!!")
+  (println "Welcome to Rock Paper Scissors!!")
 
-(def options ["rock" "paper" "scissors"])
+  (let [computer-choice (rand-nth (keys options))
+        user-choice (keyword (read-line)) 
 
-(def cp (rand-nth options))
+        result          (rps-result user-choice
+                                                    computer-choice)
+        message         (case result
+                          :draw "draw!"
+                          :win  "Well done, you win!"
+                          :lose "You lost!")]
 
-(let [userchoice (read-line)]
-  (println "You picked " userchoice " and the computer picked " cp)
-  (cond (= userchoice cp)
-        (println "Draw!") 
+    (println "computer chose:" (get-in options [computer-choice :name]))
+    (println message)))
 
-        (and (= userchoice "rock") (= cp "paper"))
-          (println "You lose!")
-   
-        ;;meow
-        (and (= userchoice "paper") (= cp "rock"))
-          (println "You win!")
-
-        (and (= userchoice "scissors") (= cp "paper"))
-            (println "You win!") 
-        (and (= userchoice "paper") (= cp "scissors"))
-             (println "You lose!")
-        (and (= userchoice "scissors") (= cp "rock"))
-            (println "You lose!")
-        (and (= userchoice "rock") (= cp "scissors"))
-          (println "You win!")
-            
-))
-
-
+(rock-paper-scissors)
